@@ -12,12 +12,15 @@ SOURCES += \
     ghost.cpp \
     main.cpp \
     game.cpp \
-    pac.cpp
+    pac.cpp \
+    scene.cpp
 
 HEADERS += \
     game.h \
+    game_macros.h \
     ghost.h \
-    pac.h
+    pac.h \
+    scene.h
 
 FORMS += \
     game.ui
@@ -26,3 +29,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Images.qrc

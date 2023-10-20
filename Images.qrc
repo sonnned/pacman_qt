@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>textures/Door.png</file>
+        <file>textures/Energizer24.png</file>
+        <file>textures/Fruit32.png</file>
+        <file>textures/GameOver32.png</file>
+        <file>textures/GhostBody32.png</file>
+        <file>textures/GhostEyes32.png</file>
+        <file>textures/Lives32.png</file>
+        <file>textures/Map24.png</file>
+        <file>textures/PacMan32.png</file>
+        <file>textures/Pellet24.png</file>
+        <file>textures/PMSprites.png</file>
+    </qresource>
+</RCC>

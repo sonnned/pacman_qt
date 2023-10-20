@@ -1,0 +1,9 @@
+#ifndef GAME_MACROS_H
+#define GAME_MACROS_H
+
+#define LIVING_PAC_HEIGHT 32
+#define LIVING_PAC_WEIGHT 32
+#define DEATH_PAC_HEIGHT 32
+#define DEATH_PAC_WEIGHT 32
+
+#endif // GAME_MACROS_H
