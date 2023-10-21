@@ -10,17 +10,12 @@ Ghost::Ghost()
     if (is_alive && !is_scared) {
         connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_living_sprite()));
         cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-        //setPixmap(*ghost_body);
-        //setPixmap(*ghost_eyes);
     } else if (is_alive && is_scared) {
         connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_scared_sprite()));
         cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-        //setPixmap(*ghost_body);
-        //setPixmap(*ghost_eyes);
     } else {
         connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_death_sprite()));
         cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-        //setPixmap(*ghost_eyes);
     }
 
     setPos(x_pos, y_pos);
@@ -64,12 +59,12 @@ void Ghost::auto_change_living_sprite()
     if (current_ghost_body_sprite == 6) current_ghost_body_sprite = 1;
     else current_ghost_body_sprite++;
 
-    //if (current_ghost_eyes_sprite == 4) current_ghost_eyes_sprite = 1;
-    //else current_ghost_eyes_sprite++;
-
     cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    //setPixmap(*ghost_body);
-    //setPixmap(*ghost_eyes);
+    QColor target_color = QColor(255, 255, 255);
+    QColor replacement_color = QColor(255, 0, 0);
+    change_pixmap_color(*ghost_body, target_color, replacement_color);
+
+
     QPixmap combined_pixmaps(*ghost_body);
     QPainter painter(&combined_pixmaps);
 
@@ -78,6 +73,23 @@ void Ghost::auto_change_living_sprite()
 
     setPixmap(combined_pixmaps);
 }
+
+void Ghost::change_pixmap_color(QPixmap& pixmap, const QColor& target_color, const QColor& replacement_color)
+{
+    QImage image = pixmap.toImage();
+
+    //Itera pixel
+    for (int x = 0; x < image.width(); x++) {
+        for (int y = 0; y < image.height(); y++) {
+            QColor pixel_color = image.pixelColor(x, y);
+            if (pixel_color == target_color) {
+                image.setPixelColor(x, y, replacement_color);
+            }
+        }
+    }
+    pixmap = QPixmap::fromImage(image);
+}
+
 
 void Ghost::auto_change_death_sprite()
 {
@@ -93,8 +105,6 @@ void Ghost::auto_change_scared_sprite()
     current_ghost_eyes_sprite = 5;
 
     cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    //setPixmap(*ghost_body);
-    //setPixmap(*ghost_eyes);
     QPixmap combined_pixmaps(*ghost_body);
     QPainter painter(&combined_pixmaps);
 

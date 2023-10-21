@@ -38,6 +38,7 @@ private:
     QPixmap *ghost_eyes;
     QTimer *ghost_sprite_change_timer;
     void cut_sprites(std::string sprite_body, std::string sprite_eye, int amount_of_sprites_body, int amount_of_sprites_eye);
+    void change_pixmap_color(QPixmap& pixmap, const QColor& target_color, const QColor& replacement_color);
 private slots:
     void auto_change_living_sprite();
     void auto_change_death_sprite();
