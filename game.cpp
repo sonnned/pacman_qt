@@ -15,7 +15,6 @@ game::game(QWidget *parent)
     this->setWindowTitle("Pac-Man");
     //set the icon of the window
     this->setWindowIcon(QIcon(":/textures/Lives32.png"));
-
     //set the background color
     this->setStyleSheet("background-color: rgb(28,28,28);");
 }

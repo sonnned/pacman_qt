@@ -4,12 +4,14 @@ Scene::Scene()
 {
     scene = new QGraphicsScene;
     pac = new Pac;
+    ghost = new Ghost;
 }
 
 Scene::~Scene()
 {
     delete scene;
     delete pac;
+    delete ghost;
 }
 
 void Scene::set_graphicsview(QGraphicsView *graphics)

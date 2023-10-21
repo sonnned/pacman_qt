@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
+#include <QKeyEvent>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -19,10 +20,13 @@ private:
     //Pac variables
     unsigned int lives = 3;
     unsigned int score = 0;
-    unsigned int speed = 1;
+    unsigned int speed = 8;
     unsigned int power_time = 10;
     bool is_powered = false;
-    bool is_alive = false;
+    bool is_alive = true;
+    bool is_moving = false;
+    int x_pos = 0;
+    int y_pos = 0;
     //Sprites variables
     unsigned int current_living_sprite = 1;
     unsigned int current_death_sprite = 1;
@@ -37,6 +41,8 @@ private slots:
     //Sprites events
     void auto_change_living_sprite();
     void auto_change_death_sprite();
+    //Key events
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // PAC_H
