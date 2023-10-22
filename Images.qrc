@@ -10,5 +10,6 @@
         <file>textures/Map24.png</file>
         <file>textures/PacMan32.png</file>
         <file>textures/Pellet24.png</file>
+        <file>textures/MapBlock7.png</file>
     </qresource>
 </RCC>
