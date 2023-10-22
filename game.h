@@ -12,7 +12,6 @@ QT_END_NAMESPACE
 class game : public QMainWindow
 {
     Q_OBJECT
-
 public:
     game(QWidget *parent = nullptr);
     ~game();
