@@ -6,26 +6,31 @@ Pac::Pac()
     pac_sprite_change_timer = new QTimer;
     death_pac = new QPixmap;
     pac_sprite_change_timer->start(1000/30);
+    connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(pac_movement()));
     if (is_alive) {
         connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_living_sprite()));
         cut_sprites(PAC_SPRITES[0], current_living_sprite);
-        //setPixmap(*living_pac);
     } else {
         connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_death_sprite()));
         cut_sprites(PAC_SPRITES[1], current_death_sprite);
-        //setPixmap(*death_pac);
     }
-
     setPos(x_pos, y_pos);
-    //read the keyboard events
-    setFlag(QGraphicsItem::ItemIsFocusable);
-    setFocus();
 }
 
 Pac::~Pac() {
     delete living_pac;
     delete death_pac;
     delete pac_sprite_change_timer;
+}
+
+void Pac::setIs_moving(bool newIs_moving)
+{
+    is_moving = newIs_moving;
+}
+
+unsigned int Pac::getSpeed() const
+{
+    return speed;
 }
 
 void Pac::cut_sprites(std::string sprite, int amount_of_sprites)
@@ -64,38 +69,15 @@ void Pac::auto_change_death_sprite() {
     setPixmap(*death_pac);
 }
 
-void Pac::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_A) {
-        setPos(x() - speed, y());
-        if (x() < 0) {
-            setPos(0, y());
+void Pac::pac_movement()
+{
+    colliding_items = collidingItems();
+
+    for (int i = 0; i < colliding_items.size(); i++) {
+        if (typeid(*(colliding_items[i])) == typeid(Ghost)) {
+            x_pos = 0;
+            y_pos = 0;
+            setPos(x_pos, y_pos);
         }
-        setTransformOriginPoint(16, 16);
-        setRotation(180);
-        is_moving = true;
-    } else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D) {
-        setPos(x() + speed, y());
-        if (x() > 800 - 32) {
-            setPos(800 - 32, y());
-        }
-        setTransformOriginPoint(16, 16);
-        setRotation(0);
-        is_moving = true;
-    } else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W) {
-        setPos(x(), y() - speed);
-        if (y() < 0) {
-            setPos(x(), 0);
-        }
-        setTransformOriginPoint(16, 16);
-        setRotation(270);
-        is_moving = true;
-    } else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S) {
-        setPos(x(), y() + speed);
-        if (y() > 600 - 32) {
-            setPos(x(), 600 - 32);
-        }
-        setTransformOriginPoint(16, 16);
-        setRotation(90);
-        is_moving = true;
     }
 }

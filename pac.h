@@ -2,10 +2,13 @@
 #define PAC_H
 
 #include "game_macros.h"
+#include "ghost.h"
+
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
 #include <QKeyEvent>
+#include <QList>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -16,6 +19,8 @@ class Pac: public QObject, public QGraphicsPixmapItem
 public:
     Pac();
     ~Pac();
+    void setIs_moving(bool newIs_moving);
+    unsigned int getSpeed() const;
 private:
     //Pac variables
     unsigned int lives = 3;
@@ -35,14 +40,14 @@ private:
     QPixmap *living_pac;
     QPixmap *death_pac;
     QTimer *pac_sprite_change_timer;
+    QList <QGraphicsItem*> colliding_items;
     //Sprites methods
     void cut_sprites(std::string sprite, int amount_of_sprites);
 private slots:
     //Sprites events
     void auto_change_living_sprite();
     void auto_change_death_sprite();
-    //Key events
-    void keyPressEvent(QKeyEvent *event);
+    void pac_movement();
 };
 
 #endif // PAC_H
