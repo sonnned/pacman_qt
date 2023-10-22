@@ -10,12 +10,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <QColor>
 
 class Ghost: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Ghost();
+    Ghost(const QColor &target_color, const QColor &replacement_color);
+    Ghost(const QColor &target_color, const QColor &replacement_color, int x_pos, int y_pos);
     ~Ghost();
 private:
     //Ghost variables
@@ -37,8 +39,10 @@ private:
     QPixmap *ghost_body;
     QPixmap *ghost_eyes;
     QTimer *ghost_sprite_change_timer;
+    QColor target_color;
+    QColor replacement_color;
     void cut_sprites(std::string sprite_body, std::string sprite_eye, int amount_of_sprites_body, int amount_of_sprites_eye);
-    void change_pixmap_color(QPixmap& pixmap, const QColor& target_color, const QColor& replacement_color);
+    void change_pixmap_color(QPixmap &pixmap);
 private slots:
     void auto_change_living_sprite();
     void auto_change_death_sprite();

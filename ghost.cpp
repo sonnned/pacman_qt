@@ -1,7 +1,36 @@
 #include "ghost.h"
 
-Ghost::Ghost()
+Ghost::Ghost(const QColor &target_color, const QColor &replacement_color)
 {
+    this->target_color = target_color;
+    this->replacement_color = replacement_color;
+
+    ghost_body = new QPixmap;
+    ghost_eyes = new QPixmap;
+    ghost_sprite_change_timer = new QTimer;
+    ghost_sprite_change_timer->start(1000/20);
+
+    if (is_alive && !is_scared) {
+        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_living_sprite()));
+        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+    } else if (is_alive && is_scared) {
+        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_scared_sprite()));
+        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+    } else {
+        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_death_sprite()));
+        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+    }
+
+    setPos(x_pos, y_pos);
+}
+
+Ghost::Ghost(const QColor &target_color, const QColor &replacement_color, int x_pos, int y_pos)
+{
+    this->target_color = target_color;
+    this->replacement_color = replacement_color;
+    this->x_pos = x_pos;
+    this->y_pos = y_pos;
+
     ghost_body = new QPixmap;
     ghost_eyes = new QPixmap;
     ghost_sprite_change_timer = new QTimer;
@@ -60,9 +89,7 @@ void Ghost::auto_change_living_sprite()
     else current_ghost_body_sprite++;
 
     cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    QColor target_color = QColor(255, 255, 255);
-    QColor replacement_color = QColor(255, 0, 0);
-    change_pixmap_color(*ghost_body, target_color, replacement_color);
+    change_pixmap_color(*ghost_body);
 
 
     QPixmap combined_pixmaps(*ghost_body);
@@ -74,7 +101,7 @@ void Ghost::auto_change_living_sprite()
     setPixmap(combined_pixmaps);
 }
 
-void Ghost::change_pixmap_color(QPixmap& pixmap, const QColor& target_color, const QColor& replacement_color)
+void Ghost::change_pixmap_color(QPixmap &pixmap)
 {
     QImage image = pixmap.toImage();
 
