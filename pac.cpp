@@ -7,13 +7,6 @@ Pac::Pac()
     death_pac = new QPixmap;
     pac_sprite_change_timer->start(1000/30);
     connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(pac_movement()));
-    if (is_alive) {
-        connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_living_sprite()));
-        cut_sprites(PAC_SPRITES[0], current_living_sprite);
-    } else {
-        connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_death_sprite()));
-        cut_sprites(PAC_SPRITES[1], current_death_sprite);
-    }
     setPos(x_pos, y_pos);
 }
 
@@ -73,11 +66,40 @@ void Pac::pac_movement()
 {
     colliding_items = collidingItems();
 
-    for (int i = 0; i < colliding_items.size(); i++) {
-        if (typeid(*(colliding_items[i])) == typeid(Ghost)) {
-            x_pos = 0;
-            y_pos = 0;
-            setPos(x_pos, y_pos);
+    if (is_alive) {
+        for (int i = 0; i < colliding_items.size(); i++) {
+            if (typeid(*(colliding_items[i])) == typeid(Ghost)) {
+                is_alive = false;
+                lives--;
+                //speed = 0;
+                //x_pos = 0;
+                //y_pos = 0;
+                std::cout << "Tienes " << lives << " vidas" << std::endl;
+
+                return;
+            }
         }
+
+        if (current_living_sprite == 3)
+            current_living_sprite = 1;
+        else
+            current_living_sprite++;
+
+        if (is_moving) {
+            cut_sprites(PAC_SPRITES[0], current_living_sprite);
+            is_moving = false;
+        } else {
+            cut_sprites(PAC_SPRITES[0], 3);
+        }
+        setPixmap(*living_pac);
+    } else {
+        if (current_death_sprite == 10)
+            current_death_sprite = 1;
+        else
+            current_death_sprite++;
+
+        cut_sprites(PAC_SPRITES[1], current_death_sprite);
+        setPixmap(*death_pac);
     }
 }
+
