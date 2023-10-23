@@ -16,6 +16,11 @@
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#centralWidget {
+background-image: url(://fondo.png);
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGraphicsView" name="main_scene">
     <property name="geometry">
