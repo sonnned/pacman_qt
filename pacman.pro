@@ -13,14 +13,16 @@ SOURCES += \
     main.cpp \
     game.cpp \
     pac.cpp \
-    scene.cpp
+    scene.cpp \
+    wall.cpp
 
 HEADERS += \
     game.h \
     game_macros.h \
     ghost.h \
     pac.h \
-    scene.h
+    scene.h \
+    wall.h
 
 FORMS += \
     game.ui
