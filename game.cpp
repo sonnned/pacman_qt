@@ -46,7 +46,7 @@ game::~game()
 
 void game::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_A) {
+    if ((event->key() == Qt::Key_Left || event->key() == Qt::Key_A) && pac->getIs_alive()) {
         pac->setPos(pac->x() - pac->getSpeed(), pac->y());
         if (pac->x() < 0) {
             pac->setPos(0, pac->y());
@@ -54,7 +54,7 @@ void game::keyPressEvent(QKeyEvent *event)
         pac->setTransformOriginPoint(16, 16);
         pac->setRotation(180);
         pac->setIs_moving(true);
-    } else if (event->key() == Qt::Key_Right || event->key() == Qt::Key_D) {
+    } else if ((event->key() == Qt::Key_Right || event->key() == Qt::Key_D) && pac->getIs_alive()) {
         pac->setPos(pac->x() + pac->getSpeed(), pac->y());
         if (pac->x() > 600 - pac->getSpeed()) {
             pac->setPos(600 - pac->getSpeed(), pac->y());
@@ -62,7 +62,7 @@ void game::keyPressEvent(QKeyEvent *event)
         pac->setTransformOriginPoint(16, 16);
         pac->setRotation(0);
         pac->setIs_moving(true);
-    } else if (event->key() == Qt::Key_Up || event->key() == Qt::Key_W) {
+    } else if ((event->key() == Qt::Key_Up || event->key() == Qt::Key_W) && pac->getIs_alive()) {
         pac->setPos(pac->x(), pac->y() - pac->getSpeed());
         if (pac->y() < 0) {
             pac->setPos(pac->x(), 0);
@@ -70,7 +70,7 @@ void game::keyPressEvent(QKeyEvent *event)
         pac->setTransformOriginPoint(16, 16);
         pac->setRotation(270);
         pac->setIs_moving(true);
-    } else if (event->key() == Qt::Key_Down || event->key() == Qt::Key_S) {
+    } else if ((event->key() == Qt::Key_Down || event->key() == Qt::Key_S) && pac->getIs_alive()) {
         pac->setPos(pac->x(), pac->y() + pac->getSpeed());
         if (pac->y() > 800 - pac->getSpeed()) {
             pac->setPos(pac->x(), 800 - pac->getSpeed());

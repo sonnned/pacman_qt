@@ -26,6 +26,16 @@ unsigned int Pac::getSpeed() const
     return speed;
 }
 
+bool Pac::getIs_moving() const
+{
+    return is_moving;
+}
+
+bool Pac::getIs_alive() const
+{
+    return is_alive;
+}
+
 void Pac::cut_sprites(std::string sprite, int amount_of_sprites)
 {
     if (is_alive) {
@@ -75,6 +85,7 @@ void Pac::pac_movement()
                 //x_pos = 0;
                 //y_pos = 0;
                 std::cout << "Tienes " << lives << " vidas" << std::endl;
+                pac_sprite_change_timer->setInterval(1000 / 10);
 
                 return;
             }
@@ -93,9 +104,23 @@ void Pac::pac_movement()
         }
         setPixmap(*living_pac);
     } else {
-        if (current_death_sprite == 10)
+        if (current_death_sprite == 10) {
             current_death_sprite = 1;
-        else
+            if (lives > 0) {
+                is_alive = true;
+                x_pos = 0;
+                y_pos = 0;
+                setPos(x_pos, y_pos);
+            } else {
+                //Implementar fin de juego
+                std::cout << "Perdiste" << std::endl;
+                is_alive = true;
+                lives = 3;
+                x_pos = 0;
+                y_pos = 0;
+                setPos(x_pos, y_pos);
+            }
+        } else
             current_death_sprite++;
 
         cut_sprites(PAC_SPRITES[1], current_death_sprite);

@@ -21,6 +21,8 @@ public:
     ~Pac();
     void setIs_moving(bool newIs_moving);
     unsigned int getSpeed() const;
+    bool getIs_moving() const;
+    bool getIs_alive() const;
 private:
     //Pac variables
     unsigned int lives = 3;
