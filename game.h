@@ -4,6 +4,7 @@
 #include "scene.h"
 #include "pac.h"
 #include "ghost.h"
+#include "wall.h"
 
 #include <QMainWindow>
 #include <QKeyEvent>
@@ -11,6 +12,8 @@
 #include <QColor>
 #include <QPixmap>
 #include <QString>
+#include <vector>
+#include <string>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class game; }
@@ -31,6 +34,8 @@ private:
     Ghost *pinky;
     Ghost *clyde;
     Ghost *inky;
+    Wall *wall;
     void keyPressEvent(QKeyEvent *event);
+    void create_map();
 };
 #endif // GAME_H
