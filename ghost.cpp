@@ -67,6 +67,9 @@ void Ghost::cut_sprites(std::string sprite_body, std::string sprite_eye, int amo
 
         *ghost_body = living_sprite_body.copy((amount_of_sprites_body * GHOST_WEIGHT) - GHOST_WEIGHT, 0, GHOST_WEIGHT, GHOST_HEIGHT);
         *ghost_eyes = living_sprite_eye.copy((amount_of_sprites_eye * GHOST_WEIGHT) - GHOST_WEIGHT, 0, GHOST_WEIGHT, GHOST_HEIGHT);
+
+        *ghost_eyes = ghost_eyes->scaled(24, 24, Qt::KeepAspectRatio);
+        *ghost_body = ghost_body->scaled(24, 24, Qt::KeepAspectRatio);
     } else if (is_alive && is_scared){
         QPixmap scared_sprite_body;
         QPixmap scared_sprite_eye;
@@ -75,11 +78,16 @@ void Ghost::cut_sprites(std::string sprite_body, std::string sprite_eye, int amo
 
         *ghost_body = scared_sprite_body.copy((amount_of_sprites_body * GHOST_WEIGHT) - GHOST_WEIGHT, 0, GHOST_WEIGHT, GHOST_HEIGHT);
         *ghost_eyes = scared_sprite_eye.copy((amount_of_sprites_eye * GHOST_WEIGHT) - GHOST_WEIGHT, 0, GHOST_WEIGHT, GHOST_HEIGHT);
+
+        *ghost_eyes = ghost_eyes->scaled(24, 24, Qt::KeepAspectRatio);
+        *ghost_body = ghost_body->scaled(24, 24, Qt::KeepAspectRatio);
     } else {
         QPixmap death_sprite_eye;
         death_sprite_eye.load(QString::fromStdString(sprite_eye));
 
         *ghost_eyes = death_sprite_eye.copy((amount_of_sprites_eye * GHOST_WEIGHT) - GHOST_WEIGHT, 0, GHOST_WEIGHT, GHOST_HEIGHT);
+
+        *ghost_eyes = ghost_eyes->scaled(24, 24, Qt::KeepAspectRatio);
     }
 }
 
@@ -121,6 +129,7 @@ void Ghost::change_pixmap_color(QPixmap &pixmap)
 void Ghost::auto_change_death_sprite()
 {
     cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+    *ghost_eyes = ghost_eyes->scaled(24, 24, Qt::KeepAspectRatio);
     setPixmap(*ghost_eyes);
 }
 

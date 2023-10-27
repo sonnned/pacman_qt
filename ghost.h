@@ -28,8 +28,8 @@ private:
     unsigned int scared_speed = 1;
     unsigned int eaten_speed = 2;
     unsigned int scared_time = 10;
-    unsigned int x_pos = 160;
-    unsigned int y_pos = 160;
+    unsigned int x_pos = 120;
+    unsigned int y_pos = 120;
     //Sprite variables
     const std::vector<std::string> GHOST_BODY_SPRITES = {":/textures/GhostBody32.png"};
     const std::vector<std::string> GHOST_EYES_SPRITES = {":/textures/GhostEyes32.png"};
