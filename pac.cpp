@@ -42,10 +42,12 @@ void Pac::cut_sprites(std::string sprite, int amount_of_sprites)
         QPixmap living_sprite;
         living_sprite.load(QString::fromStdString(sprite));
         *living_pac = living_sprite.copy((amount_of_sprites * LIVING_PAC_WEIGHT) - LIVING_PAC_WEIGHT, 0, LIVING_PAC_WEIGHT, LIVING_PAC_HEIGHT);
+        *living_pac = living_pac->scaled(24, 24, Qt::KeepAspectRatio);
     } else {
         QPixmap death_sprite;
         death_sprite.load(QString::fromStdString(sprite));
         *death_pac = death_sprite.copy((amount_of_sprites * DEATH_PAC_WEIGHT) - DEATH_PAC_WEIGHT, 0, DEATH_PAC_WEIGHT, DEATH_PAC_HEIGHT);
+        *death_pac = death_pac->scaled(24, 24, Qt::KeepAspectRatio);
     }
 }
 
@@ -81,13 +83,12 @@ void Pac::pac_movement()
             if (typeid(*(colliding_items[i])) == typeid(Ghost)) {
                 is_alive = false;
                 lives--;
-                //speed = 0;
-                //x_pos = 0;
-                //y_pos = 0;
                 std::cout << "Tienes " << lives << " vidas" << std::endl;
                 pac_sprite_change_timer->setInterval(1000 / 10);
 
                 return;
+            }
+            if (typeid(*(colliding_items[i])) == typeid(Wall)) {
             }
         }
 
@@ -108,16 +109,16 @@ void Pac::pac_movement()
             current_death_sprite = 1;
             if (lives > 0) {
                 is_alive = true;
-                x_pos = 0;
-                y_pos = 0;
+                x_pos = 264;
+                y_pos = 504;
                 setPos(x_pos, y_pos);
             } else {
                 //Implementar fin de juego
                 std::cout << "Perdiste" << std::endl;
                 is_alive = true;
                 lives = 3;
-                x_pos = 0;
-                y_pos = 0;
+                x_pos = 264;
+                y_pos = 504;
                 setPos(x_pos, y_pos);
             }
         } else

@@ -3,6 +3,7 @@
 
 #include "game_macros.h"
 #include "ghost.h"
+#include "wall.h"
 
 #include <QObject>
 #include <QGraphicsPixmapItem>
@@ -27,13 +28,13 @@ private:
     //Pac variables
     unsigned int lives = 3;
     unsigned int score = 0;
-    unsigned int speed = 8;
+    unsigned int speed = 6;
     unsigned int power_time = 10;
     bool is_powered = false;
     bool is_alive = true;
     bool is_moving = false;
-    int x_pos = 0;
-    int y_pos = 0;
+    int x_pos = 264;
+    int y_pos = 504;
     //Sprites variables
     unsigned int current_living_sprite = 1;
     unsigned int current_death_sprite = 1;
