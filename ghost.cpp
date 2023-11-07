@@ -160,16 +160,26 @@ void Ghost::eaten_mode(int ghost_id)
 }
 
 void Ghost::blinky_movement(int pac_x, int pac_y) {
+    //Diferencias de coordenadas de pacman y blinky
     int dx = pac_x - x();
     int dy = pac_y - y();
 
+    //comparamos el valor absoluto de las diferencias
+    //para saber si pacman esta mas cerca en x o en y
+    //y no darle prioridad a una direccion
     if (abs(dx) > abs(dy)) {
+        //Está más lejos de la horizontal
+        //Si dx es positivo, pacman está a la derecha
+        //Si dx es negativo, pacman está a la izquierda
         if (dx > 0) {
             setPos(x() + speed, y());
         } else {
             setPos(x() - speed, y());
         }
     } else {
+        //Está más lejos de la vertical
+        //Si dy es positivo, pacman está abajo
+        //Si dy es negativo, pacman está arriba
         if (dy > 0) {
             setPos(x(), y() + speed);
         } else {
