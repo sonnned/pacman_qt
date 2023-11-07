@@ -106,6 +106,7 @@ void Pac::pac_movement() {
                     is_alive = false;
                     lives--;
                     pac_sprite_change_timer->setInterval(1000 / 10);
+                    emit lost_life();
                     return;
                 }
             }
@@ -168,6 +169,7 @@ void Pac::pac_movement() {
         cut_sprites(PAC_SPRITES[1], current_death_sprite);
         setPixmap(*death_pac);
     }
+    emit pacman_position(x(), y());
 }
 
 void Pac::normal_mode() {

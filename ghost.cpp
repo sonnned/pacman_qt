@@ -95,6 +95,9 @@ void Ghost::change_pixmap_color(QPixmap &pixmap)
 }
 
 void Ghost::auto_change_sprite() {
+    if (ghost_id == 1) {
+        blinky_movement(target_x, target_y);
+    }
     if (is_alive && !is_scared) {
         if (current_ghost_body_sprite == 6) current_ghost_body_sprite = 1;
         else current_ghost_body_sprite++;
@@ -157,6 +160,50 @@ void Ghost::eaten_mode(int ghost_id)
 }
 
 void Ghost::blinky_movement(int pac_x, int pac_y) {
-    target_x = pac_x;
-    target_y = pac_y;
+    int dx = pac_x - x();
+    int dy = pac_y - y();
+
+    if (abs(dx) > abs(dy)) {
+        if (dx > 0) {
+            setPos(x() + speed, y());
+        } else {
+            setPos(x() - speed, y());
+        }
+    } else {
+        if (dy > 0) {
+            setPos(x(), y() + speed);
+        } else {
+            setPos(x(), y() - speed);
+        }
+    }
+}
+
+
+void Ghost::update_target(int pac_x, int pac_y) {
+    if (ghost_id == 1 && is_alive) {
+        target_x = pac_x;
+        target_y = pac_y;
+    } else {
+        go_to_spawn();
+    }
+}
+
+void Ghost::go_to_spawn() {
+    if (x() == 264 && y() == 288) {
+        is_eaten = false;
+        is_alive = true;
+        is_scared = false;
+        current_ghost_eyes_sprite = 1;
+        scared_timer->stop();
+    } else {
+        if (x() < 264) {
+            setPos(x() + speed, y());
+        } else if (x() > 264) {
+            setPos(x() - speed, y());
+        } else if (y() < 288) {
+            setPos(x(), y() + speed);
+        } else if (y() > 288) {
+            setPos(x(), y() - speed);
+        }
+    }
 }

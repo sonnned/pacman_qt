@@ -8,6 +8,7 @@
 #include "points.h"
 #include "score.h"
 #include "messages.h"
+#include "lives.h"
 
 #include <QMainWindow>
 #include <QKeyEvent>
@@ -41,6 +42,7 @@ private:
     Score *score;
     Points *points;
     Messages *message;
+    Lives *lives;
     void keyPressEvent(QKeyEvent *event);
     void create_map();
     void freeze_game(bool freeze);

@@ -11,8 +11,8 @@
 #define WALL_WEIGHT 8
 #define SCORE_X 24
 #define SCORE_Y 0
-#define LIVES_X 24
-#define LIVES_Y 400
+#define LIVES_X 330
+#define LIVES_Y 0
 #define MESSAGE_X 190
 #define MESSAGE_Y 400
 

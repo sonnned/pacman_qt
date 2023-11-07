@@ -19,6 +19,7 @@ game::game(QWidget *parent)
     inky = new Ghost(ghost_target_color, inky_replacement_color, 288, 360, 4);
     score = new Score;
     message = new Messages;
+    lives = new Lives;
 
     scene->setSceneRect(0, 0, ui->main_scene->width()-2, ui->main_scene->height()-2);
     scene->addItem(pac);
@@ -28,6 +29,7 @@ game::game(QWidget *parent)
     scene->addItem(inky);
     scene->addItem(score);
     scene->addItem(message);
+    scene->addItem(lives);
 
     create_map();
 
@@ -48,6 +50,8 @@ game::game(QWidget *parent)
     connect(pac, &Pac::ghost_eaten, clyde, &Ghost::eaten_mode);
     connect(pac, &Pac::ghost_eaten, inky, &Ghost::eaten_mode);
     connect(pac, &Pac::game_over_message, message, &Messages::show_message);
+    connect(pac, &Pac::lost_life, lives, &Lives::decrease_lives);
+    connect(pac, &Pac::pacman_position, blinky, &Ghost::update_target);
 }
 
 game::~game()
@@ -64,6 +68,7 @@ game::~game()
     delete points;
     delete score;
     delete message;
+    delete lives;
 }
 
 void game::keyPressEvent(QKeyEvent *event)

@@ -69,6 +69,8 @@ signals:
     void scare_ghosts();
     void ghost_eaten(int ghost_id);
     void game_over_message(std::string message);
+    void lost_life();
+    void pacman_position(int x, int y);
 };
 
 #endif // PAC_H

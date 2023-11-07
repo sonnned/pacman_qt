@@ -31,6 +31,7 @@ public:
     }
 public slots:
     void eaten_mode(int ghost_id);
+    void update_target(int pac_x, int pac_y);
 private:
     int ghost_id;
     //Ghost variables
@@ -38,7 +39,7 @@ private:
     bool is_alive = true;
     bool is_scared = false;
     bool is_eaten = false;
-    unsigned int speed = 1;
+    unsigned int speed = 3;
     unsigned int scared_speed = 1;
     unsigned int eaten_speed = 2;
     unsigned int x_pos = 120;
@@ -60,6 +61,7 @@ private:
     void blinky_movement(int pac_x, int pac_y);
     int target_x = 0;
     int target_y = 0;
+    void go_to_spawn();
 private slots:
     void auto_change_sprite();
     void normal_mode();

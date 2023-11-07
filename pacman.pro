@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     ghost.cpp \
+    lives.cpp \
     main.cpp \
     game.cpp \
     messages.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     game.h \
     game_macros.h \
     ghost.h \
+    lives.h \
     messages.h \
     pac.h \
     points.h \
