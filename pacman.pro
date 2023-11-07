@@ -12,16 +12,22 @@ SOURCES += \
     ghost.cpp \
     main.cpp \
     game.cpp \
+    messages.cpp \
     pac.cpp \
+    points.cpp \
     scene.cpp \
+    score.cpp \
     wall.cpp
 
 HEADERS += \
     game.h \
     game_macros.h \
     ghost.h \
+    messages.h \
     pac.h \
+    points.h \
     scene.h \
+    score.h \
     wall.h
 
 FORMS += \
@@ -33,4 +39,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    Images.qrc
+    Images.qrc \
+    fonts/fuentes.qrc

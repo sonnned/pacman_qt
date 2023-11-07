@@ -1,52 +1,36 @@
 #include "ghost.h"
 
-Ghost::Ghost(const QColor &target_color, const QColor &replacement_color)
+Ghost::Ghost(const QColor &target_color, const QColor &replacement_color, int ghost_id)
 {
     this->target_color = target_color;
     this->replacement_color = replacement_color;
+    this->ghost_id = ghost_id;
 
     ghost_body = new QPixmap;
     ghost_eyes = new QPixmap;
     ghost_sprite_change_timer = new QTimer;
+    scared_timer = new QTimer;
     ghost_sprite_change_timer->start(1000/20);
-
-    if (is_alive && !is_scared) {
-        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_living_sprite()));
-        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    } else if (is_alive && is_scared) {
-        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_scared_sprite()));
-        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    } else {
-        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_death_sprite()));
-        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    }
-
+    connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_sprite()));
+    connect(scared_timer, SIGNAL(timeout()), this, SLOT(normal_mode()));
     setPos(x_pos, y_pos);
 }
 
-Ghost::Ghost(const QColor &target_color, const QColor &replacement_color, int x_pos, int y_pos)
+Ghost::Ghost(const QColor &target_color, const QColor &replacement_color, int x_pos, int y_pos, int ghost_id)
 {
     this->target_color = target_color;
     this->replacement_color = replacement_color;
     this->x_pos = x_pos;
     this->y_pos = y_pos;
+    this->ghost_id = ghost_id;
 
     ghost_body = new QPixmap;
     ghost_eyes = new QPixmap;
     ghost_sprite_change_timer = new QTimer;
+    scared_timer = new QTimer;
     ghost_sprite_change_timer->start(1000/20);
-
-    if (is_alive && !is_scared) {
-        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_living_sprite()));
-        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    } else if (is_alive && is_scared) {
-        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_scared_sprite()));
-        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    } else {
-        connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_death_sprite()));
-        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    }
-
+    connect(ghost_sprite_change_timer, SIGNAL(timeout()), this, SLOT(auto_change_sprite()));
+    connect(scared_timer, SIGNAL(timeout()), this, SLOT(normal_mode()));
     setPos(x_pos, y_pos);
 }
 
@@ -55,6 +39,7 @@ Ghost::~Ghost()
     delete ghost_body;
     delete ghost_eyes;
     delete ghost_sprite_change_timer;
+    delete scared_timer;
 }
 
 void Ghost::cut_sprites(std::string sprite_body, std::string sprite_eye, int amount_of_sprites_body, int amount_of_sprites_eye)
@@ -91,24 +76,6 @@ void Ghost::cut_sprites(std::string sprite_body, std::string sprite_eye, int amo
     }
 }
 
-void Ghost::auto_change_living_sprite()
-{
-    if (current_ghost_body_sprite == 6) current_ghost_body_sprite = 1;
-    else current_ghost_body_sprite++;
-
-    cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    change_pixmap_color(*ghost_body);
-
-
-    QPixmap combined_pixmaps(*ghost_body);
-    QPainter painter(&combined_pixmaps);
-
-    painter.drawPixmap(0, 0, *ghost_eyes);
-    painter.end();
-
-    setPixmap(combined_pixmaps);
-}
-
 void Ghost::change_pixmap_color(QPixmap &pixmap)
 {
     QImage image = pixmap.toImage();
@@ -117,36 +84,79 @@ void Ghost::change_pixmap_color(QPixmap &pixmap)
     for (int x = 0; x < image.width(); x++) {
         for (int y = 0; y < image.height(); y++) {
             QColor pixel_color = image.pixelColor(x, y);
-            if (pixel_color == target_color) {
+            if (pixel_color == target_color && !is_scared) {
                 image.setPixelColor(x, y, replacement_color);
+            } else if (pixel_color == target_color && is_scared) {
+                image.setPixelColor(x, y, Qt::blue);
             }
         }
     }
     pixmap = QPixmap::fromImage(image);
 }
 
+void Ghost::auto_change_sprite() {
+    if (is_alive && !is_scared) {
+        if (current_ghost_body_sprite == 6) current_ghost_body_sprite = 1;
+        else current_ghost_body_sprite++;
 
-void Ghost::auto_change_death_sprite()
-{
-    cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    *ghost_eyes = ghost_eyes->scaled(24, 24, Qt::KeepAspectRatio);
-    setPixmap(*ghost_eyes);
+        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+        change_pixmap_color(*ghost_body);
+        QPixmap combined_pixmaps(*ghost_body);
+        QPainter painter(&combined_pixmaps);
+
+        painter.drawPixmap(0, 0, *ghost_eyes);
+        painter.end();
+
+        setPixmap(combined_pixmaps);
+    } else if (is_alive && is_scared) {
+        if (current_ghost_body_sprite == 6) current_ghost_body_sprite = 1;
+        else current_ghost_body_sprite++;
+
+        current_ghost_eyes_sprite = 5;
+
+        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+        change_pixmap_color(*ghost_body);
+        QPixmap combined_pixmaps(*ghost_body);
+        QPainter painter(&combined_pixmaps);
+
+        painter.drawPixmap(0, 0, *ghost_eyes);
+        painter.end();
+
+        setPixmap(combined_pixmaps);
+    } else if (!is_alive && !is_scared && is_eaten) {
+        cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
+        *ghost_eyes = ghost_eyes->scaled(24, 24, Qt::KeepAspectRatio);
+        setPixmap(*ghost_eyes);
+    }
 }
 
-void Ghost::auto_change_scared_sprite()
+void Ghost::scared_mode()
 {
-    if (current_ghost_body_sprite == 6) current_ghost_body_sprite = 1;
-    else current_ghost_body_sprite++;
-
-    current_ghost_eyes_sprite = 5;
-
-    cut_sprites(GHOST_BODY_SPRITES[0], GHOST_EYES_SPRITES[0], current_ghost_body_sprite, current_ghost_eyes_sprite);
-    QPixmap combined_pixmaps(*ghost_body);
-    QPainter painter(&combined_pixmaps);
-
-    painter.drawPixmap(0, 0, *ghost_eyes);
-    painter.end();
-
-    setPixmap(combined_pixmaps);
+    is_scared = true;
+    ghost_sprite_change_timer->start(1000/10);
+    scared_timer->start(10000);
 }
 
+void Ghost::normal_mode()
+{
+    is_scared = false;
+    current_ghost_eyes_sprite = 1;
+    ghost_sprite_change_timer->start(1000/20);
+    scared_timer->stop();
+}
+
+void Ghost::eaten_mode(int ghost_id)
+{
+    if (this->ghost_id == ghost_id) {
+        is_eaten = true;
+        is_alive = false;
+        is_scared = false;
+        current_ghost_eyes_sprite = 1;
+        scared_timer->stop();
+    }
+}
+
+void Ghost::blinky_movement(int pac_x, int pac_y) {
+    target_x = pac_x;
+    target_y = pac_y;
+}

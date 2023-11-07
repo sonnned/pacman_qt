@@ -5,8 +5,10 @@ Pac::Pac()
     living_pac = new QPixmap;
     pac_sprite_change_timer = new QTimer;
     death_pac = new QPixmap;
+    power_timer = new QTimer;
     pac_sprite_change_timer->start(1000/30);
     connect(pac_sprite_change_timer, SIGNAL(timeout()), this, SLOT(pac_movement()));
+    connect(power_timer, SIGNAL(timeout()), this, SLOT(normal_mode()));
     setPos(x_pos, y_pos);
 }
 
@@ -14,6 +16,7 @@ Pac::~Pac() {
     delete living_pac;
     delete death_pac;
     delete pac_sprite_change_timer;
+    delete power_timer;
 }
 
 void Pac::setIs_moving(bool newIs_moving)
@@ -34,6 +37,21 @@ bool Pac::getIs_moving() const
 bool Pac::getIs_alive() const
 {
     return is_alive;
+}
+
+bool Pac::getIs_wall_collision() const
+{
+    return is_wall_collision;
+}
+
+void Pac::setIs_wall_collision(bool newIs_wall_collision)
+{
+    is_wall_collision = newIs_wall_collision;
+}
+
+unsigned int Pac::getScore() const
+{
+    return score;
 }
 
 void Pac::cut_sprites(std::string sprite, int amount_of_sprites)
@@ -74,21 +92,47 @@ void Pac::auto_change_death_sprite() {
     setPixmap(*death_pac);
 }
 
-void Pac::pac_movement()
-{
+void Pac::pac_movement() {
     colliding_items = collidingItems();
 
     if (is_alive) {
         for (int i = 0; i < colliding_items.size(); i++) {
             if (typeid(*(colliding_items[i])) == typeid(Ghost)) {
-                is_alive = false;
-                lives--;
-                std::cout << "Tienes " << lives << " vidas" << std::endl;
-                pac_sprite_change_timer->setInterval(1000 / 10);
-
-                return;
+                Ghost *ghost = dynamic_cast<Ghost *>(colliding_items[i]);
+                if (!ghost->getIs_alive()) continue;
+                if (is_powered) {
+                    emit ghost_eaten(ghost->getGhost_id());
+                } else {
+                    is_alive = false;
+                    lives--;
+                    pac_sprite_change_timer->setInterval(1000 / 10);
+                    return;
+                }
             }
             if (typeid(*(colliding_items[i])) == typeid(Wall)) {
+                //is_wall_collision = true;
+            }
+            if (typeid(*(colliding_items[i])) == typeid(Points)) {
+                Points *point = dynamic_cast<Points *>(colliding_items[i]); //<- Bajamos el puntero a la clase Points
+                if (point->getIs_power()) {
+                    score += 500;
+                    is_powered = true;
+                    power_timer->start(10000);
+                    emit scare_ghosts();
+                } else {
+                    score += 100;
+                }
+                amount_of_points++;
+                scene()->removeItem(colliding_items[i]);
+                delete colliding_items[i];
+                emit points_eaten(score);
+                if (amount_of_points == 192) {
+                    emit game_over_message("YOU WIN!");
+                    emit game_won();
+                    current_living_sprite = 1;
+                    cut_sprites(PAC_SPRITES[0], current_living_sprite);
+                    setPixmap(*living_pac);
+                }
             }
         }
 
@@ -110,16 +154,13 @@ void Pac::pac_movement()
             if (lives > 0) {
                 is_alive = true;
                 x_pos = 264;
-                y_pos = 504;
+                y_pos = 528;
                 setPos(x_pos, y_pos);
             } else {
-                //Implementar fin de juego
-                std::cout << "Perdiste" << std::endl;
+                emit game_over_message("GAME OVER");
+                emit game_won();
+                current_living_sprite = 1;
                 is_alive = true;
-                lives = 3;
-                x_pos = 264;
-                y_pos = 504;
-                setPos(x_pos, y_pos);
             }
         } else
             current_death_sprite++;
@@ -129,3 +170,6 @@ void Pac::pac_movement()
     }
 }
 
+void Pac::normal_mode() {
+    is_powered = false;
+}

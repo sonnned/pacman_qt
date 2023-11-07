@@ -5,6 +5,9 @@
 #include "pac.h"
 #include "ghost.h"
 #include "wall.h"
+#include "points.h"
+#include "score.h"
+#include "messages.h"
 
 #include <QMainWindow>
 #include <QKeyEvent>
@@ -35,7 +38,15 @@ private:
     Ghost *clyde;
     Ghost *inky;
     Wall *wall;
+    Score *score;
+    Points *points;
+    Messages *message;
     void keyPressEvent(QKeyEvent *event);
     void create_map();
+    void freeze_game(bool freeze);
+    void remove_pixmap();
+    bool is_game_freezed = false;
+private slots:
+    void game_is_won();
 };
 #endif // GAME_H

@@ -3,7 +3,7 @@
 Wall::Wall(int x_pos, int y_pos, int sprite_position)
 {
     wall = new QPixmap;
-    if (sprite_position == 1 || sprite_position == 16) {
+    if (sprite_position == 1 || sprite_position == 16 || sprite_position == 17) {
         return;
     }
     cut_sprites(WALL_SPRITES[0], sprite_position, x_pos, y_pos);
@@ -48,10 +48,6 @@ void Wall::cut_sprites(std::string sprite, int amount_of_sprites, int x, int y)
         *wall = wall_sprite.copy((amount_of_sprites * WALL_WEIGHT) - WALL_WEIGHT, 0, WALL_WEIGHT, WALL_HEIGHT);
     } else if (amount_of_sprites == 15) {
         *wall = wall_sprite.copy((amount_of_sprites * WALL_WEIGHT) - WALL_WEIGHT, 0, WALL_WEIGHT, WALL_HEIGHT);
-    } else if (amount_of_sprites == 16) {
-        *wall = wall_sprite.copy((1 * WALL_WEIGHT) - WALL_WEIGHT, WALL_HEIGHT, WALL_WEIGHT, WALL_HEIGHT);
-    } else if (amount_of_sprites == 17) {
-        *wall = wall_sprite.copy((2 * WALL_WEIGHT) - WALL_WEIGHT, WALL_HEIGHT, WALL_WEIGHT, WALL_HEIGHT);
     } else if (amount_of_sprites == 18) {
         *wall = wall_sprite.copy((3 * WALL_WEIGHT) - WALL_WEIGHT, WALL_HEIGHT, WALL_WEIGHT, WALL_HEIGHT);
     }
