@@ -74,9 +74,13 @@ game::~game()
 
     void game::keyPressEvent(QKeyEvent *event)
 {
-    if ((event->key() == Qt::Key_Left || event->key() == Qt::Key_A) && pac->getIs_alive() && !is_game_freezed) {
+    if (( event->key() == Qt::Key_Left || event->key() == Qt::Key_A) && pac->getIs_alive() && !is_game_freezed) {
+
         pac->setPos(pac->x() - pac->getSpeed(), pac->y());
+
+
         if (pac->getIs_wall_collision()) {
+
             pac->setPos(pac->x() + pac->getSpeed(), pac->y());
            pac->setIs_wall_collision(false);
             return;
@@ -89,9 +93,12 @@ game::~game()
         pac->setTransformOriginPoint(12, 12);
         pac->setRotation(180);
         pac->setIs_moving(true);
-    } else if ((event->key() == Qt::Key_Right || event->key() == Qt::Key_D) && pac->getIs_alive() && !is_game_freezed) {
+    }
+    else if ((event->key() == Qt::Key_Right || event->key() == Qt::Key_D) && pac->getIs_alive() && !is_game_freezed) {
+
         pac->setPos(pac->x() + pac->getSpeed(), pac->y());
         if (pac->getIs_wall_collision()) {
+
             pac->setPos(pac->x() - pac->getSpeed(), pac->y());
             pac->setIs_wall_collision(false);
             return;
@@ -105,10 +112,11 @@ game::~game()
         pac->setRotation(0);
         pac->setIs_moving(true);
     } else if ((event->key() == Qt::Key_Up || event->key() == Qt::Key_W) && pac->getIs_alive() && !is_game_freezed) {
+
         pac->setPos(pac->x(), pac->y() - pac->getSpeed());
 
         if (pac->getIs_wall_collision()) {
-            pac->setPos(pac->x(), pac->y() + pac->getSpeed());
+           pac->setPos(pac->x(), pac->y() + pac->getSpeed());
             pac->setIs_wall_collision(false);
             return;
 
@@ -122,9 +130,11 @@ game::~game()
         pac->setRotation(270);
         pac->setIs_moving(true);
     } else if ((event->key() == Qt::Key_Down || event->key() == Qt::Key_S) && pac->getIs_alive() && !is_game_freezed) {
+
         pac->setPos(pac->x(), pac->y() + pac->getSpeed());
         if (pac->getIs_wall_collision()) {
-            pac->setPos(pac->x(), pac->y() - pac->getSpeed());
+
+         pac->setPos(pac->x(), pac->y() - pac->getSpeed());
             pac->setIs_wall_collision(false);
             return;
         }

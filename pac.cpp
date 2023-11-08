@@ -159,7 +159,7 @@ void Pac::pac_movement() {
                 }
             }
             if (typeid(*(colliding_items[i])) == typeid(Wall)) {
-                //is_wall_collision = true;
+                is_wall_collision = true;
             }
             if (typeid(*(colliding_items[i])) == typeid(Points)) {
                 Points *point = dynamic_cast<Points *>(colliding_items[i]); //<- Bajamos el puntero a la clase Points
