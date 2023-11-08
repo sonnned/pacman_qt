@@ -43,6 +43,7 @@ private:
     Points *points;
     Messages *message;
     Lives *lives;
+    std::vector<std::vector<int>> map;
     void keyPressEvent(QKeyEvent *event);
     void create_map();
     void freeze_game(bool freeze);

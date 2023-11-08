@@ -32,6 +32,16 @@ public:
     void set_freeze(bool freeze) {
         is_freezed = freeze;
     }
+
+
+ /*
+    void incy(int incr);
+    void incrx(int incr);
+    bool colision_down();
+    bool colision_left();
+    bool colision_right();
+    bool colision_above();
+*/
 private:
     //Pac variables
     bool is_freezed = false;
@@ -45,6 +55,9 @@ private:
     bool is_wall_collision = false;
     int x_pos = 264;
     int y_pos = 528;
+    int x_map;
+    int y_map;
+
     //Sprites variables
     unsigned int current_living_sprite = 1;
     unsigned int current_death_sprite = 1;

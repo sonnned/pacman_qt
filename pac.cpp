@@ -53,7 +53,55 @@ unsigned int Pac::getScore() const
 {
     return score;
 }
+/*
+void Pac::incy(int incr)
+{
+    y_map +=incr;
+}
 
+void Pac::incrx(int incr)
+{
+    x_map+=incr;
+}
+
+bool Pac::colision_down()
+{
+    if(map[y_map+1][x_map] !=0){
+        return true;}
+    else{
+        return false;
+    }
+}
+
+bool Pac::colision_left()
+{
+    if(map[y_map][x_map-1] !=0){
+        return true; }
+    else{
+        return false;
+    }
+}
+
+bool Pac::colision_right()
+{
+    if(map[y_map][x_map+1] !=0){
+        return true; }
+    else{
+        return false;
+    }
+}
+
+bool Pac::colision_above()
+{
+    if(map[y_map-1][x_map] !=0){
+        return true;}
+    else{
+        return false;
+    }
+
+}
+
+*/
 void Pac::cut_sprites(std::string sprite, int amount_of_sprites)
 {
     if (is_alive) {
